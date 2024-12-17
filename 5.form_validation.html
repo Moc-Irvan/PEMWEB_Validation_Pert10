@@ -1,0 +1,141 @@
+<!-- Form Validation (35%) 
+Pada praktikum ini anda diminta membuat form validasi dengan menggunakan JavaScript. Berikut 
+data pada komponen form yang anda kirim untuk di validasi. 
+• Nama Pelanggan : (required validation, maksimum 30 karakter) 
+• Email: (required validation, email format) 
+• Jam Keberangkatan : (required validation, jam dengan format jam antara 00.00 – 23.59) 
+• Tujuan Keberangkatan : (required validation) 
+• Jumlah Tiket : (required validation, bilangan bulat antara 1 – 10 ) 
+Ketika tombol submit di tekan, JavaScript akan melakukan validasi, jika terjadi kesalahan inputan 
+yang tidak sesuai dengan format data yang ditentukan maka halaman web akan menampilkan 
+pesan kesalahan (error) disamping field berwarna merah bahwa data tidak valid, jika data form 
+valid tampilkan keseluruhan data nama pelanggan, email, jam keberangkatan, tujuan dan jumlah 
+tiket dibawah form. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .error {
+            color: red;
+        }
+        .error-input {
+            border: 1px solid red;
+        }
+        p {
+            background-color: rgb(6, 243, 6);
+            width: 15rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- pengisian formulir pemesanan tiket pesawat -->
+    <h1>Pemesanan Tiket</h1>
+    <form id="pemesanan">
+
+        <!-- pengisian nama pelanggan -->
+        <label for="nama">Nama Pelanggan:</label><br>
+        <input type="text" id="nama" name="nama" maxlength="30" placeholder="Masukan Nama" required>
+        <span class="error" id="namaError"></span><br><br>
+
+        <!-- pengisian email -->
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" placeholder="Masukan Email" required>
+        <span class="error" id="emailError"></span><br><br>
+
+        <!-- pengisian jam keberangkatan -->
+        <label for="jam">Jam Keberangkatan:</label><br>
+        <input type="text" id="jam" name="jam" placeholder="Masukan Jam" required>
+        <span class="error" id="jamError"></span><br><br>
+
+        <!-- pengisian tujuan keberangkatan -->
+        <label for="tujuan">Tujuan Keberangkatan:</label><br>
+        <input type="text" id="tujuan" name="tujuan" placeholder="Masukan Tujuan Anda" required>
+        <span class="error" id="tujuanError"></span><br><br>
+
+        <!-- pengisian jumlah tiket -->
+        <label for="jumlah">Jumlah Tiket:</label><br>
+        <input type="number" id="jumlah" name="jumlah" min="1" max="10" required>
+        <span class="error" id="jumlahError"></span><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <div id="result" style="margin-top: 20px;"></div>
+
+    <script>
+    document.getElementById('pemesanan').addEventListener('submit', function(event) {
+        // Mencegah form dari pengiriman default
+        event.preventDefault(); 
+
+        // Menghapus pesan error sebelumnya
+        const errorElements = document.querySelectorAll('.error');
+        errorElements.forEach(el => el.textContent = '');
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => input.classList.remove('error-input'));
+
+        let isValid = true;
+
+        // Validasi Nama Pelanggan
+        const nama = document.getElementById('nama').value;
+        if (nama.length === 0 || nama.length > 30) {
+            document.getElementById('namaError').textContent = 'Nama pelanggan harus diisi dan maksimal 30 karakter.';
+            document.getElementById('nama').classList.add('error-input');
+            isValid = false;
+        }
+
+        // Validasi Email
+        const email = document.getElementById('email').value;
+        const emailPattern = /@[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            document.getElementById('emailError').textContent = 'Format email tidak valid.';
+            document.getElementById('email').classList.add('error-input');
+            isValid = false;
+        }
+
+        // Validasi Jam Keberangkatan
+        const jam = document.getElementById('jam').value;
+        const jamPattern = /^(0[0-9]|1[0-9]|2[0-3])\.[0-5][0-9]$/;
+        if (!jamPattern.test(jam)) {
+            document.getElementById('jamError').textContent = 'Format Harus Mengikuti HH.MM antara 00.00 - 23.59.';
+            document.getElementById('jam').classList.add('error-input');
+            isValid = false;
+        }
+
+        // Validasi Tujuan Keberangkatan
+        const tujuan = document.getElementById('tujuan').value;
+        if (tujuan.length === 0) {
+            document.getElementById('tujuanError').textContent = 'Tujuan keberangkatan harus diisi.';
+            document.getElementById('tujuan').classList.add('error-input');
+            isValid = false;
+        }
+
+        // Validasi Jumlah Tiket
+        const jumlah = document.getElementById('jumlah').value;
+        if (jumlah < 1 || jumlah > 10) {
+            document.getElementById('jumlahError').textContent = 'Jumlah tiket harus antara 1.';
+            document.getElementById('jumlahError').textContent = 'Jumlah tiket harus antara 1 dan 10.';
+            document.getElementById('jumlah').classList.add('error-input');
+            isValid = false;
+        }
+
+        // Jika semua validasi berhasil
+        if (isValid) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `z
+                <h2>Data Pemesanan Tiket:</h2>
+                <p>Nama Pelanggan       : ${nama}</p>
+                <p>Email                : ${email}</p>
+                <p>Jam Keberangkatan    : ${jam}</p>
+                <p>Tujuan Keberangkatan : ${tujuan}</p>
+                <p>Jumlah Tiket         : ${jumlah}</p>
+            `;
+        }
+    });
+</script>
+</body>
+</html>
+
